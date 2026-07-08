@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grupo Angelus — Portfólio de POCs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  /* Grupo Angelus — navy institucional + dourado (premium/financeiro) */
+  --navy-950:#081a30; --navy-900:#0c2340; --navy-800:#123056; --navy-700:#1b4474;
+  --navy-600:#265d97; --blue-500:#3b7bc4; --blue-400:#5f9ad8; --blue-300:#aecbec;
+  --green:#c9a227; --green-600:#a5811a; --green-200:#ecdca0;
+  --warn:#f5a524; --danger:#ef4d57; --ok:#1a9e6a;
+  --bg:#eef1f6; --card:#ffffff; --ink:#0e1c30; --muted:#5d6b80; --line:#e3e8f0;
+  --ring:rgba(201,162,39,.42);
+  --shadow:0 10px 30px -12px rgba(12,35,64,.30);
+  --shadow-sm:0 4px 14px -8px rgba(12,35,64,.26);
+  --grad:linear-gradient(120deg,#265d97,#c9a227);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Inter',system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--ink);
+  background:
+    radial-gradient(900px 500px at 100% -5%,rgba(201,162,39,.10),transparent 60%),
+    radial-gradient(800px 600px at -10% 110%,rgba(38,93,151,.14),transparent 55%),
+    var(--bg);
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+.app{display:flex;min-height:100vh}
+h1,h2,h3,h4,.val,.brand b{font-family:'Manrope','Inter',sans-serif}
+
+/* Sidebar */
+.side{width:288px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;
+  background:linear-gradient(170deg,var(--navy-950),var(--navy-900) 60%,var(--navy-800));
+  color:#d5e0ef;border-right:1px solid rgba(255,255,255,.06);}
+.side::-webkit-scrollbar{width:7px}.side::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:8px}
+.brand{padding:24px 22px 12px}
+.logo{display:block}
+.logo svg{width:100%;max-width:206px;height:auto;display:block}
+.brandsub{padding:8px 22px 14px;color:#98add0;font-size:11px;line-height:1.4;border-bottom:1px solid rgba(255,255,255,.10)}
+.navgroup{padding:8px 16px 2px}
+.navgroup h4{margin:14px 0 8px;padding:0 10px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#8098bf;font-weight:700}
+.nav a{display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:11px;font-size:13.5px;
+  color:#c0cfe6;cursor:pointer;transition:.18s ease;position:relative;font-weight:500;}
+.nav a .ico{width:22px;text-align:center;font-size:15px}
+.nav a:hover{background:rgba(255,255,255,.07);color:#fff;transform:translateX(2px)}
+.nav a.active{background:linear-gradient(90deg,rgba(201,162,39,.26),rgba(38,93,151,.12));
+  color:#fff;font-weight:700;box-shadow:inset 0 0 0 1px rgba(201,162,39,.36);}
+.nav a.active::before{content:"";position:absolute;left:-16px;top:8px;bottom:8px;width:4px;border-radius:0 4px 4px 0;background:var(--green)}
+.side .foot{padding:18px 22px 26px;color:#8098bf;font-size:11px;line-height:1.5}
+
+/* Main */
+.main{flex:1;min-width:0}
+.topbar{backdrop-filter:saturate(160%) blur(10px);background:rgba(255,255,255,.8);border-bottom:1px solid var(--line);
+  padding:15px 34px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:30;}
+.topbar .crumb{font-size:11.5px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.topbar h2{margin:3px 0 0;font-size:20px;letter-spacing:-.3px}
+.pill{font-size:11px;padding:6px 13px;border-radius:999px;font-weight:700}
+.tag-poc{background:linear-gradient(135deg,rgba(201,162,39,.18),rgba(38,93,151,.10));color:#8a6b12;box-shadow:inset 0 0 0 1px rgba(201,162,39,.36)}
+.content{padding:30px 34px 70px;max-width:1220px;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.lead{color:var(--muted);font-size:14.5px;max-width:840px;line-height:1.6;margin:0 0 24px}
+.lead b{color:var(--navy-700)}
+.dashtag{display:inline-block;font-size:11px;font-weight:700;color:#8a6b12;background:rgba(201,162,39,.16);padding:4px 11px;border-radius:999px;margin-bottom:10px;letter-spacing:.04em}
+
+/* grid / cards */
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:980px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow-sm);transition:transform .2s,box-shadow .2s;}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.card h3{margin:0 0 4px;font-size:14.5px;letter-spacing:-.2px}
+.card .sub{color:var(--muted);font-size:12px;margin-bottom:14px}
+.kpi{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;box-shadow:var(--shadow-sm);transition:.2s;}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.kpi .lab{font-size:12px;color:var(--muted);font-weight:500}
+.kpi .val{font-size:28px;font-weight:800;letter-spacing:-1px;margin-top:4px;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.kpi .delta{font-size:12px;font-weight:700;margin-top:5px}
+.up{color:var(--ok)}.down{color:var(--danger)}.flat{color:var(--muted)}
+.bar-top{height:4px;border-radius:6px;margin:-20px -20px 16px;background:var(--grad)}
+canvas{max-width:100%}
+.chartbox{height:262px;position:relative}.chartbox.sm{height:202px}.chartbox.lg{height:300px}
+
+/* table */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}
+th{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+tbody tr{transition:.15s}tbody tr:hover{background:#f4f7fc}
+.badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;display:inline-block}
+.b-ok{background:#e4f6ec;color:#0f7a45}.b-warn{background:#fdf0db;color:#b9770a}.b-bad{background:#fdeaec;color:#cf2436}.b-info{background:#e6eefa;color:#1b4474}
+
+/* innovative components */
+.gauge{position:relative;width:180px;height:180px;margin:0 auto}
+.gauge .lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.gauge .lbl b{font-family:'Manrope';font-size:32px;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.gauge .lbl span{font-size:11px;color:var(--muted);margin-top:4px}
+.rings{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:780px){.rings{grid-template-columns:repeat(2,1fr)}}
+.ring{text-align:center}
+.ring .circ{width:118px;height:118px;border-radius:50%;margin:0 auto;display:grid;place-items:center;position:relative}
+.ring .circ::before{content:"";position:absolute;inset:11px;border-radius:50%;background:var(--card)}
+.ring .circ b{position:relative;font-family:'Manrope';font-size:22px}
+.ring .nm{font-size:12px;color:var(--muted);margin-top:10px;font-weight:600}
+.ring .dl{font-size:11px;font-weight:700;margin-top:2px}
+.minirings{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.heat{display:grid;gap:6px;font-size:12px}
+.heat .hrow{display:grid;grid-template-columns:190px repeat(5,1fr);gap:6px;align-items:center}
+.heat .hh{font-size:10px;color:var(--muted);font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:.02em}
+.heat .hl{font-size:12px;font-weight:600;color:var(--navy-700)}
+.cell{height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;transition:transform .15s}
+.cell:hover{transform:scale(1.08);box-shadow:var(--shadow)}
+.c0{background:#e3e8f0;color:var(--muted)}
+.c1{background:#1a9e6a}.c2{background:#5f9ad8;color:#0c2340}.c3{background:#f5a524}.c4{background:#ef4d57}
+.heatleg{display:flex;gap:14px;margin-top:14px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+.sw{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:5px;vertical-align:middle}
+.kanban{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+@media(max-width:980px){.kanban{grid-template-columns:1fr 1fr}}
+.kcol{background:#f2f5fa;border:1px solid var(--line);border-radius:14px;padding:12px;min-height:240px}
+.kcol .kh{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;font-weight:700;margin-bottom:10px;color:var(--navy-700)}
+.kcol .kh .cnt{background:#fff;border:1px solid var(--line);border-radius:999px;padding:1px 9px;font-size:11px}
+.kdot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+.kcard{background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px;margin-bottom:9px;box-shadow:var(--shadow-sm);border-left:3px solid var(--blue-400)}
+.kcard.cr{border-left-color:var(--danger)}.kcard.wn{border-left-color:var(--warn)}.kcard.ok{border-left-color:var(--ok)}
+.kcard .kt{font-size:12px;font-weight:700}
+.kcard .km{font-size:10.5px;color:var(--muted);margin-top:3px}
+.kcard .kf{display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-size:10px;color:var(--muted)}
+.av{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--navy-600));color:#fff;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.funnel{display:flex;flex-direction:column;align-items:center;gap:7px;padding:6px 0}
+.fstage{color:#fff;border-radius:10px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;font-weight:700;box-shadow:var(--shadow-sm);transition:transform .15s}
+.fstage:hover{transform:scale(1.02)}
+.fstage small{font-weight:500;opacity:.9;font-size:11px}
+.fstage b{font-family:'Manrope';font-size:16px}
+.dealcard{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+.dealcard .di{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,rgba(201,162,39,.16),rgba(38,93,151,.2));display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.dealcard .dn{font-size:13px;font-weight:600}.dealcard .ds{font-size:11px;color:var(--muted)}
+.dealcard .dv{margin-left:auto;font-family:'Manrope';font-weight:700;color:var(--navy-700);font-size:14px}
+.twin{position:relative;background:linear-gradient(160deg,#081a30,#1b4474);border-radius:16px;height:330px;overflow:hidden}
+.twin .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:28px 28px}
+.hot{position:absolute;transform:translate(-50%,-50%);cursor:pointer}
+.hot .pin{width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 4px rgba(255,255,255,.12)}
+.hot .pin.cr{background:var(--danger);animation:pulse 1.6s infinite}
+.hot .pin.wn{background:var(--warn)}.hot .pin.ok{background:var(--ok)}.hot .pin.hq{background:var(--green)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(239,77,87,.6)}70%{box-shadow:0 0 0 14px rgba(239,77,87,0)}100%{box-shadow:0 0 0 0 rgba(239,77,87,0)}}
+.hot .tip{position:absolute;left:24px;top:-8px;background:rgba(255,255,255,.96);border-radius:8px;padding:5px 9px;font-size:10.5px;white-space:nowrap;color:var(--navy-800);font-weight:600;box-shadow:var(--shadow)}
+.twin .lbl-eq{position:absolute;color:#c6d6ef;font-size:10px;font-weight:600}
+.twinleg{display:flex;gap:16px;margin-top:12px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+.spark{display:flex;align-items:flex-end;gap:3px;height:36px}
+.spark i{flex:1;background:linear-gradient(180deg,var(--blue-400),var(--blue-300));border-radius:3px 3px 0 0;min-height:3px}
+.scoretab td{vertical-align:middle}
+.trend-up{color:var(--ok);font-weight:700}.trend-dn{color:var(--danger);font-weight:700}
+
+/* app showcases */
+.applay{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}
+@media(max-width:900px){.applay{grid-template-columns:1fr}}
+.maplbl{font-size:10px;fill:#c6d6ef;font-weight:600}
+.fmap{position:relative;height:330px;border-radius:14px;overflow:hidden;background:linear-gradient(160deg,#081a30,#1b4474)}
+.syncrow{display:flex;gap:10px;flex-wrap:wrap}
+.syncpill{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font-size:12px;font-weight:600;box-shadow:var(--shadow-sm)}
+.syncpill .d{width:9px;height:9px;border-radius:50%}
+.statrow{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+.statrow b{font-family:'Manrope';font-size:18px}
+.statrow .sd{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:8px}
+.tline{position:relative;margin:30px 14px 10px;height:60px}
+.tline .base{height:4px;background:var(--line);border-radius:4px;position:absolute;left:0;right:0;top:7px}
+.tline .fillb{height:4px;border-radius:4px;position:absolute;left:0;top:7px;background:linear-gradient(90deg,var(--danger),var(--warn),var(--ok))}
+.tnode{position:absolute;top:-1px;transform:translateX(-50%);text-align:center;width:88px}
+.tnode .pin{width:18px;height:18px;border-radius:50%;border:3px solid #fff;margin:0 auto;box-shadow:var(--shadow-sm)}
+.tnode .dd{font-size:11px;font-weight:700;margin-top:6px}
+.tnode .cap{font-size:9.5px;color:var(--muted);margin-top:1px;font-weight:600;line-height:1.15}
+.stepper{display:flex;align-items:flex-start;margin:10px 0 4px}
+.snode{flex:1;text-align:center;position:relative}
+.snode .cir{width:34px;height:34px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:13px;position:relative;z-index:2}
+.snode .cir.done{background:var(--ok)}.snode .cir.act{background:var(--navy-600);box-shadow:0 0 0 5px rgba(38,93,151,.18)}.snode .cir.pend{background:#c3cfe0}
+.snode .stx{font-size:10.5px;margin-top:8px;color:var(--navy-700);font-weight:700;line-height:1.2}
+.snode .ssub{font-size:10px;color:var(--muted);margin-top:1px}
+.snode::before{content:"";position:absolute;top:17px;left:-50%;width:100%;height:3px;background:var(--line);z-index:1}
+.snode:first-child::before{display:none}
+.snode.fdone::before{background:var(--ok)}
+.xpwrap{display:flex;align-items:center;gap:12px}
+.lvl{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--green),var(--navy-600));color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--shadow-sm)}
+.lvl b{font-family:'Manrope';font-size:17px;line-height:1}.lvl span{font-size:8px;letter-spacing:.08em}
+.xpbar{height:12px;border-radius:999px;background:#e3e8f0;overflow:hidden;margin:7px 0 4px}
+.xpbar i{display:block;height:100%;background:var(--grad)}
+.streak{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.streak i{width:21px;height:21px;border-radius:5px;background:#e3e8f0}
+.streak i.on{background:linear-gradient(135deg,var(--green),var(--green-600))}
+.streak i.today{outline:2px solid var(--navy-600);outline-offset:1px}
+.badgewall{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px}
+.bdg{text-align:center;background:#f2f5fa;border:1px solid var(--line);border-radius:12px;padding:11px 6px}
+.bdg .ic{font-size:22px}.bdg .bn{font-size:9.5px;color:var(--muted);margin-top:5px;font-weight:600;line-height:1.15}
+.bdg.lock{opacity:.4;filter:grayscale(1)}
+.leader .lr{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+.leader .rk{width:23px;height:23px;border-radius:50%;background:var(--navy-700);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.leader .rk.g{background:linear-gradient(135deg,#c9a227,#a5811a)}
+.leader .lr.me{font-weight:700;color:var(--navy-700)}
+.leader .lr .pts{margin-left:auto;font-weight:700;color:var(--muted)}
+.detview{position:relative;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#081a30,#123056);height:300px}
+.detview .gridb{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:30px 30px}
+.bbox{position:absolute;border:2px solid;border-radius:6px}
+.bbox .bl{position:absolute;top:-19px;left:-2px;font-size:10px;font-weight:700;padding:1px 6px;border-radius:5px;color:#0c2340;white-space:nowrap}
+.confrow{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+.confrow .cn{font-size:12px;width:170px;font-weight:600}
+.confbar{flex:1;height:9px;border-radius:9px;background:#e3e8f0;overflow:hidden}
+.confbar i{display:block;height:100%;border-radius:9px}
+.confrow .cv{font-size:11px;font-weight:700;width:46px;text-align:right}
+.pipe{display:flex;align-items:center;flex-wrap:wrap}
+.pstep{flex:1;text-align:center;background:#f2f5fa;border:1px solid var(--line);border-radius:11px;padding:10px 6px;min-width:84px}
+.pstep .pi{font-size:17px}.pstep .pn{font-size:10px;font-weight:700;margin-top:3px;color:var(--navy-700)}
+.parr{color:var(--green-600);font-weight:800;padding:0 6px}
+
+/* personalization extras */
+.certrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.cert{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#fff;background:rgba(201,162,39,.18);border:1px solid rgba(201,162,39,.42);padding:5px 12px;border-radius:999px}
+.livechip{display:inline-flex;align-items:center;font-size:11px;color:var(--muted);font-weight:600}
+.livedot{width:8px;height:8px;border-radius:50%;background:#1a9e6a;display:inline-block;margin-right:7px;box-shadow:0 0 0 0 rgba(26,158,106,.6);animation:lp 1.8s infinite}
+@keyframes lp{0%{box-shadow:0 0 0 0 rgba(26,158,106,.5)}70%{box-shadow:0 0 0 8px rgba(26,158,106,0)}100%{box-shadow:0 0 0 0 rgba(26,158,106,0)}}
+.clientwall{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:780px){.clientwall{grid-template-columns:repeat(2,1fr)}}
+.cwall{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:#f2f5fa;border:1px solid var(--line);border-radius:12px;padding:14px 8px;font-family:'Manrope';font-weight:700;font-size:12px;color:var(--navy-700);text-align:center;transition:.2s}
+.cwall .ce{font-size:20px}
+.cwall:hover{transform:translateY(-2px);box-shadow:var(--shadow);color:var(--green-600)}
+.donutwrap{position:relative}
+.donutctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.donutctr b{font-family:'Manrope';font-size:23px;line-height:1}
+.donutctr span{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* phone mockups */
+.phones{display:flex;flex-wrap:wrap;gap:28px}
+.phone{width:300px;flex-shrink:0;border-radius:40px;padding:11px;background:linear-gradient(160deg,#081a30,#123056);
+  box-shadow:0 30px 60px -22px rgba(8,16,31,.6),inset 0 0 0 1px rgba(255,255,255,.06);position:relative;}
+.phone::before{content:"";position:absolute;top:18px;left:50%;transform:translateX(-50%);width:96px;height:22px;background:#05101f;border-radius:0 0 14px 14px;z-index:5}
+.phone .screen{background:#eef1f6;border-radius:30px;overflow:hidden;height:600px;display:flex;flex-direction:column}
+.ph-status{height:30px;background:linear-gradient(135deg,var(--navy-800),var(--navy-600));color:#fff;font-size:10px;display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+.ph-head{background:linear-gradient(135deg,var(--navy-800),var(--navy-600));color:#fff;padding:8px 18px 16px;position:relative}
+.ph-head::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:16px;background:#eef1f6;border-radius:16px 16px 0 0}
+.ph-head .t{font-size:15px;font-weight:700;font-family:'Manrope'}
+.ph-head .s{font-size:11px;color:var(--green-200);margin-top:2px}
+.ph-body{flex:1;overflow-y:auto;padding:14px 14px 18px;background:#eef1f6}
+.ph-body::-webkit-scrollbar{width:0}
+.ph-nav{height:58px;background:#fff;border-top:1px solid var(--line);display:flex;box-shadow:0 -4px 14px -8px rgba(12,35,64,.18)}
+.ph-nav div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;color:var(--muted);gap:3px;font-weight:600}
+.ph-nav div.on{color:var(--navy-600)}
+.ph-nav .d{font-size:17px}
+.mini{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 13px;margin-bottom:11px;box-shadow:var(--shadow-sm)}
+.mini .mt{font-size:13px;font-weight:600}
+.mini .ms{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.chk{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+.box{width:19px;height:19px;border-radius:6px;border:2px solid var(--blue-300);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
+.box.c{background:var(--ok);border-color:var(--ok)}.box.x{background:var(--danger);border-color:var(--danger)}
+.btn{display:inline-block;background:linear-gradient(135deg,var(--navy-700),var(--navy-600));color:#fff;border-radius:11px;padding:10px 15px;font-size:12.5px;font-weight:700;text-align:center;box-shadow:0 8px 18px -10px rgba(38,93,151,.7)}
+.btn.full{display:block}
+.btn.acc{background:var(--grad);color:#fff;box-shadow:0 8px 18px -10px rgba(201,162,39,.8)}
+.progress{height:9px;border-radius:9px;background:#e3e8f0;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--grad);border-radius:9px}
+.note{font-size:12.5px;color:var(--muted);line-height:1.55}
+.callout{background:linear-gradient(135deg,rgba(201,162,39,.09),rgba(38,93,151,.10));border:1px solid var(--line);border-left:4px solid var(--green);border-radius:12px;padding:12px 15px;font-size:13px;color:var(--navy-700);margin:6px 0 18px;line-height:1.5}
+.feat{display:flex;gap:11px;align-items:flex-start;font-size:13px;margin-bottom:11px;line-height:1.5}
+.feat .fi{width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,rgba(201,162,39,.16),rgba(38,93,151,.2));color:var(--navy-700);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+
+/* power platform flow */
+.flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+.step{background:linear-gradient(180deg,#fff,#f5f7fb);border:1px solid var(--line);border-radius:14px;padding:14px;min-width:148px;flex:1;text-align:center;box-shadow:var(--shadow-sm);transition:.2s}
+.step:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.step .si{font-size:22px}.step .sn{font-weight:700;font-size:13px;margin-top:5px;font-family:'Manrope'}.step .sd{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.35}
+.arrow{display:flex;align-items:center;justify-content:center;color:var(--green-600);font-size:20px;padding:0 8px;font-weight:800}
+@media(max-width:900px){.arrow{transform:rotate(90deg);padding:8px 0}}
+.archlegend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:16px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:middle}
+.disc{font-size:11px;color:var(--muted);font-style:italic;margin-top:18px}
+.stack>*+*{margin-top:18px}
+.hero{border-radius:20px;padding:26px 28px;margin-bottom:24px;color:#e7eefa;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--navy-900),var(--navy-700));box-shadow:var(--shadow);}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(201,162,39,.42),transparent 65%)}
+.hero h1{color:#fff;margin:0 0 8px;font-size:24px;letter-spacing:-.4px}
+.hero p{margin:0;max-width:810px;color:#c6d6ef;font-size:14px;line-height:1.6}
+.hero .chips{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+.hero .chips span{font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16)}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo">
+      <svg viewBox="0 0 220 70" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 20 Q30 8 46 20" fill="none" stroke="#c9a227" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="30" cy="24" r="3.2" fill="#c9a227"/>
+        <text x="10" y="52" font-family="Manrope,Arial" font-weight="500" font-size="21" fill="#9db9dd" letter-spacing="1">GRUPO</text>
+        <text x="92" y="52" font-family="Manrope,Arial" font-weight="800" font-size="24" fill="#ffffff" letter-spacing="-.5">Angelus</text>
+      </svg>
+    </div></div>
+    <div class="brandsub">Cuidado em todo o ciclo da vida · Portfólio de Provas de Conceito</div>
+    <div class="navgroup"><h4>Aplicativos</h4><div class="nav" id="nav-app"></div></div>
+    <div class="navgroup"><h4>Dashboards (Power BI)</h4><div class="nav" id="nav-dash"></div></div>
+    <div class="navgroup"><h4>Power Platform</h4><div class="nav" id="nav-pp"></div></div>
+    <div class="foot">Power Tech · Power BI &amp; Power Platform · Microsoft 365<br>Dados ilustrativos para demonstração.</div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div><div class="crumb" id="crumb">Início</div><h2 id="title">Portfólio de POCs — Grupo Angelus</h2></div>
+      <div style="display:flex;align-items:center;gap:14px"><span class="livechip"><span class="livedot"></span>dados em tempo real</span><span class="pill tag-poc" id="pocflag">15 provas de conceito</span></div>
+    </div>
+    <div class="content" id="view"></div>
+  </main>
+</div>
+
+<script>
+const MES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const dp=['#0c2340','#1b4474','#265d97','#3b7bc4','#5f9ad8','#aecbec','#c9a227','#ecdca0'];
+const charts=[];
+function destroyCharts(){while(charts.length){try{charts.pop().destroy()}catch(e){}}}
+function C(id,cfg){const el=document.getElementById(id);if(!el)return;const c=new Chart(el,cfg);charts.push(c);return c;}
+Chart.defaults.font.family="'Inter',system-ui,sans-serif";
+Chart.defaults.color="#5d6b80";
+Chart.defaults.plugins.legend.labels.boxWidth=12;
+Chart.defaults.plugins.legend.labels.usePointStyle=true;
+Chart.defaults.plugins.legend.labels.font={size:11};
+
+const APPS=[
+ {id:'app1',ico:'📊',name:'Cockpit Financeiro',crumb:'Aplicativos / Cockpit Financeiro da Diretoria'},
+ {id:'app2',ico:'💳',name:'Portal do Associado',crumb:'Aplicativos / Portal do Associado'},
+ {id:'app3',ico:'🤝',name:'Consultor em Campo',crumb:'Aplicativos / Consultor & Vendas em Campo'},
+ {id:'app4',ico:'🎓',name:'Angelus Academy',crumb:'Aplicativos / Angelus Academy'},
+ {id:'app5',ico:'🤖',name:'Auditoria de Contas IA',crumb:'Aplicativos / Auditoria de Sinistros com IA'}];
+const DASH=[
+ {id:'dash1',ico:'🔥',name:'Sinistralidade & Rede',crumb:'Dashboards / Sinistralidade & Rede Própria'},
+ {id:'dash2',ico:'📣',name:'Vendas & Receita',crumb:'Dashboards / Funil de Vendas & Receita por Marca'},
+ {id:'dash3',ico:'🧾',name:'Cobrança & Inadimplência',crumb:'Dashboards / Cobrança & Inadimplência'},
+ {id:'dash4',ico:'💰',name:'DRE & Margem',crumb:'Dashboards / DRE & Margem por Unidade'},
+ {id:'dash5',ico:'📈',name:'Executivo & Governança',crumb:'Dashboards / Executivo Consolidado & Governança'}];
+const PP=[
+ {id:'pp1',ico:'📱',name:'Ordem de Serviço',crumb:'Power Platform / Power Apps (Atendimento & OS)'},
+ {id:'pp2',ico:'⚡',name:'Fechamento & DRE',crumb:'Power Platform / Power Automate (Fechamento)'},
+ {id:'pp3',ico:'🔔',name:'Alertas Financeiros',crumb:'Power Platform / Power Automate (Alertas)'},
+ {id:'pp4',ico:'📅',name:'Régua de Cobrança',crumb:'Power Platform / Power Automate (Cobrança)'},
+ {id:'pp5',ico:'💬',name:'Copiloto de Gestão',crumb:'Power Platform / Copilot Studio'}];
+
+function buildNav(){
+  const m=(list,el)=>{document.getElementById(el).innerHTML=list.map(i=>`<a data-id="${i.id}"><span class="ico">${i.ico}</span>${i.name}</a>`).join('')};
+  m(APPS,'nav-app');m(DASH,'nav-dash');m(PP,'nav-pp');
+  document.querySelectorAll('.nav a').forEach(a=>a.onclick=()=>go(a.dataset.id));
+}
+function setActive(id){document.querySelectorAll('.nav a').forEach(a=>a.classList.toggle('active',a.dataset.id===id));}
+function meta(id){return [...APPS,...DASH,...PP].find(x=>x.id===id);}
+function kpi(lab,val,delta,cls){return `<div class="kpi"><div class="bar-top"></div><div class="lab">${lab}</div><div class="val">${val}</div><div class="delta ${cls}">${delta}</div></div>`;}
+function phone(title,sub,body,nav){
+  return `<div class="phone"><div class="screen">
+    <div class="ph-status"><span>09:41</span><span>📶 🔋 100%</span></div>
+    <div class="ph-head"><div class="t">${title}</div><div class="s">${sub}</div></div>
+    <div class="ph-body">${body}</div><div class="ph-nav">${nav}</div></div></div>`;
+}
+
+/* ================= APPS ================= */
+function app1(){
+ return `<span class="dashtag">FINANCEIRO · Cockpit da diretoria + visão por unidade</span>
+ <p class="lead">App da diretoria e da controladoria com o <b>resultado consolidado do Grupo Angelus no bolso</b>: faturamento, sinistralidade, inadimplência e EBITDA por unidade de negócio, com alertas. Ao lado, o <b>painel das marcas</b> — Planos, Saúde, Seguros, Serviços Póstumos e o CSC — para decisão rápida sobre o que puxa (ou drena) o resultado.</p>
+ <div class="applay">
+  ${phone('Cockpit Angelus','Bom dia 👋 · resultado consolidado',
+    `<div class="callout" style="margin:0 0 11px">⚠️ <b>Sinistralidade</b> em Cuidados & Saúde subiu para 74% — acima da meta (70%)</div>
+     <div class="grid g2" style="grid-template-columns:1fr 1fr;gap:10px;margin-bottom:11px">
+       <div class="kpi" style="padding:12px"><div class="lab">Faturamento (mês)</div><div class="val" style="font-size:20px">R$ 28,4 mi</div></div>
+       <div class="kpi" style="padding:12px"><div class="lab">Margem EBITDA</div><div class="val" style="font-size:21px">19,3%</div></div>
+     </div>
+     <div class="mini"><div class="row"><div class="mt">Inadimplência (planos)</div><span class="badge b-warn">6,2%</span></div><div class="ms">R$ 1,76 mi em aberto · 3.918 boletos</div></div>
+     <div class="mini"><div class="row"><div class="mt">Sinistralidade global</div><span class="badge b-info">68,1%</span></div><div class="ms">meta ≤ 70% · atenção em Saúde</div></div>`,
+    `<div class="on"><span class="d">📊</span>Resultado</div><div><span class="d">🏢</span>Marcas</div><div><span class="d">🔔</span>Alertas</div><div><span class="d">👤</span>Perfil</div>`)}
+  <div class="stack">
+    <div class="card"><h3>Resultado por unidade de negócio</h3><div class="sub">faturamento e margem — passe o mouse</div>
+      <div class="fmap">
+        <svg viewBox="0 0 480 330" width="100%" height="100%" preserveAspectRatio="none" style="position:absolute;inset:0">
+          <line x1="240" y1="165" x2="120" y2="70" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
+          <line x1="240" y1="165" x2="380" y2="70" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
+          <line x1="240" y1="165" x2="110" y2="250" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
+          <line x1="240" y1="165" x2="380" y2="250" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
+          <circle cx="240" cy="165" r="15" fill="#c9a227" stroke="#fff" stroke-width="3"/><text x="240" y="200" class="maplbl" text-anchor="middle">Holding · R$ 28,4 mi</text>
+          <circle cx="120" cy="70" r="10" fill="#1a9e6a" stroke="#fff" stroke-width="3"/><text x="120" y="54" class="maplbl" text-anchor="middle">Planos · 41%</text>
+          <circle cx="380" cy="70" r="10" fill="#f5a524" stroke="#fff" stroke-width="3"/><text x="380" y="54" class="maplbl" text-anchor="middle">Saúde · sinist. 74%</text>
+          <circle cx="110" cy="250" r="9" fill="#3b7bc4" stroke="#fff" stroke-width="3"/><text x="110" y="272" class="maplbl" text-anchor="middle">Seguros · 18%</text>
+          <circle cx="380" cy="250" r="9" fill="#5f9ad8" stroke="#fff" stroke-width="3"/><text x="380" y="272" class="maplbl" text-anchor="middle">Póstumos · 13%</text>
+        </svg>
+      </div>
+      <div class="twinleg"><span><span class="sw c1"></span>No alvo</span><span><span class="sw c3"></span>Atenção</span><span><span class="sw c4"></span>Fora da meta</span></div>
+    </div>
+    <div class="card"><h3>Atualização & alertas</h3><div class="sub">consolidação dos ERPs das unidades e da operadora</div>
+      <div class="syncrow">
+        <div class="syncpill"><span class="d" style="background:var(--ok)"></span>Dados em tempo real</div>
+        <div class="syncpill"><span class="d" style="background:var(--warn)"></span>Sinistralidade em alta</div>
+        <div class="syncpill"><span class="d" style="background:var(--blue-400)"></span>Push no Teams ativo</div>
+      </div>
+    </div>
+  </div>
+ </div>
+ <div class="grid g3" style="margin-top:18px">
+   <div class="card"><div class="feat"><div class="fi">🏢</div><div><b>Grupo numa tela só</b><br><span class="note">Planos, Saúde, Seguros, Póstumos e CSC no mesmo painel.</span></div></div></div>
+   <div class="card"><div class="feat"><div class="fi">📉</div><div><b>Sinistralidade &amp; caixa</b><br><span class="note">Sinistralidade, inadimplência e EBITDA sem esperar o fechamento.</span></div></div></div>
+   <div class="card"><div class="feat"><div class="fi">🔗</div><div><b>Microsoft 365</b><br><span class="note">Alertas no Teams; nada de planilha consolidada à mão.</span></div></div></div>
+ </div>`;
+}
+function app2(){
+ setTimeout(()=>{C('a2g',{type:'doughnut',data:{datasets:[{data:[94,6],backgroundColor:['#1a9e6a','#e3e8f0'],borderWidth:0,circumference:270,rotation:225}]},options:{cutout:'74%',plugins:{legend:{display:false},tooltip:{enabled:false}}}});},40);
+ return `<span class="dashtag">EXPERIÊNCIA · Portal do associado (autoatendimento)</span>
+ <p class="lead">Área do associado (em Power Pages): <b>2ª via de boleto, plano e benefícios, rede de atendimento, carteirinha digital e uso de coberturas</b>. Autoatendimento reduz custo de call center e, com a régua de pagamento, <b>melhora a adimplência</b>. Ao lado, o cockpit da conta e a linha do tempo do vínculo do associado.</p>
+ <div class="applay">
+  ${phone('Família Oliveira','Associado · matrícula 88.204',
+    `<div class="grid g2" style="grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+       <div class="kpi" style="padding:12px"><div class="lab">Mensalidade</div><div class="val" style="font-size:19px">R$ 189,90</div></div>
+       <div class="kpi" style="padding:12px"><div class="lab">Adimplência</div><div class="val" style="font-size:20px;-webkit-text-fill-color:initial;background:none;color:var(--ok)">94%</div></div>
+     </div>
+     <div class="mini"><div class="row"><div class="mt">Boleto · vence 10/07</div><span class="badge b-warn">Em aberto</span></div><div class="ms">R$ 189,90 · toque para 2ª via / Pix</div></div>
+     <div class="mini"><div class="row"><div class="mt">Carteirinha digital</div><span class="badge b-ok">Ativa</span></div><div class="ms">rede própria · Cuidados & Saúde</div></div>
+     <div class="btn acc full">💳 Pagar agora (Pix / boleto)</div>`,
+    `<div class="on"><span class="d">💳</span>Boletos</div><div><span class="d">🩺</span>Rede</div><div><span class="d">🪪</span>Carteira</div><div><span class="d">⭐</span>Benefícios</div>`)}
+  <div class="stack">
+    <div class="card"><h3>Cockpit da conta</h3><div class="sub">Família Oliveira · plano familiar</div>
+      <div style="display:flex;gap:22px;align-items:center;flex-wrap:wrap">
+        <div class="gauge"><canvas id="a2g"></canvas><div class="lbl"><b>94%</b><span>adimplência</span></div></div>
+        <div style="flex:1;min-width:180px">
+          <div class="statrow"><span><span class="sd" style="background:var(--navy-600)"></span>Vidas no plano</span><b>4</b></div>
+          <div class="statrow"><span><span class="sd" style="background:var(--warn)"></span>Boleto em aberto</span><b>1</b></div>
+          <div class="statrow"><span><span class="sd" style="background:var(--ok)"></span>Pagos em dia (12m)</span><b>11</b></div>
+          <div class="statrow" style="border:none"><span><span class="sd" style="background:var(--green)"></span>Benefícios usados</span><b>7</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="card"><h3>Linha do vínculo · matrícula 88.204</h3><div class="sub">da adesão à renovação</div>
+      <div class="tline"><div class="base"></div><div class="fillb" style="width:66%"></div>
+        <div class="tnode" style="left:8%"><div class="pin" style="background:var(--ok)"></div><div class="dd">2019</div><div class="cap">Adesão</div></div>
+        <div class="tnode" style="left:38%"><div class="pin" style="background:var(--ok)"></div><div class="dd">2022</div><div class="cap">Upgrade plano</div></div>
+        <div class="tnode" style="left:66%"><div class="pin" style="background:var(--warn)"></div><div class="dd">Hoje</div><div class="cap">Boleto aberto</div></div>
+        <div class="tnode" style="left:92%"><div class="pin" style="background:var(--blue-400)"></div><div class="dd">2026</div><div class="cap">Renovação</div></div>
+      </div>
+    </div>
+  </div>
+ </div>
+ <div class="callout" style="margin-top:18px">💡 Autoatendimento e Pix no portal reduzem o custo de cobrança e a inadimplência, e aumentam o LTV do associado — receita recorrente mais previsível.</div>`;
+}
+function app3(){
+ return `<span class="dashtag">FINANCEIRO · Consultor & vendas em campo</span>
+ <p class="lead">App do consultor: <b>proposta de plano/seguro/assistência, simulação, assinatura digital, metas e comissão</b> — mesmo offline em visita. E a <b>jornada da venda</b> em etapas, da simulação à ativação. Acelera a conversão, dá visão de comissionamento e alimenta a receita recorrente na origem.</p>
+ <div class="applay">
+  ${phone('Proposta #PA-742','Consultor · Fernanda R.',
+    `<div class="mini"><div class="row"><div class="mt">Plano Família · 4 vidas</div><span class="badge b-info">Simulando</span></div><div class="ms">Cuidados & Saúde + Assistência · R$ 259,90/mês</div></div>
+     <div class="mini"><div class="mt">Checklist da proposta</div>
+       <div class="chk"><div class="box c">✓</div>Dados & CPF do titular</div>
+       <div class="chk"><div class="box c">✓</div>Simulação aprovada pelo cliente</div>
+       <div class="chk"><div class="box x">✕</div>Assinatura digital pendente</div>
+       <div class="chk"><div class="box">&nbsp;</div>1º pagamento (Pix)</div></div>
+     <div class="btn acc full">✍️ Enviar para assinatura</div>`,
+    `<div class="on"><span class="d">🤝</span>Propostas</div><div><span class="d">🧮</span>Simular</div><div><span class="d">🎯</span>Metas</div><div><span class="d">👤</span>Perfil</div>`)}
+  <div class="stack">
+    <div class="card"><h3>Jornada da venda · PA-742</h3><div class="sub">da simulação à ativação</div>
+      <div class="stepper">
+        <div class="snode fdone"><div class="cir done">✓</div><div class="stx">Lead</div><div class="ssub">indicação</div></div>
+        <div class="snode fdone"><div class="cir done">✓</div><div class="stx">Simulação</div><div class="ssub">aprovada</div></div>
+        <div class="snode"><div class="cir act">3</div><div class="stx">Assinatura</div><div class="ssub">em andamento</div></div>
+        <div class="snode"><div class="cir pend">4</div><div class="stx">1º pagto</div><div class="ssub">Pix</div></div>
+        <div class="snode"><div class="cir pend">5</div><div class="stx">Ativação</div><div class="ssub">carteirinha</div></div>
+      </div>
+      <div class="progress" style="margin-top:16px"><i style="width:55%"></i></div>
+      <div class="note" style="margin-top:8px">55% concluído · comissão prevista R$ 312 na ativação.</div>
+    </div>
+    <div class="card"><h3>Minha meta do mês</h3><div class="sub">vendas, receita e comissão</div>
+      <table><thead><tr><th>Produto</th><th>Vendas</th><th>Receita/mês</th><th>Status</th></tr></thead><tbody>
+        <tr><td>Planos & Benefícios</td><td>18</td><td>R$ 3.420</td><td><span class="badge b-ok">Acima</span></td></tr>
+        <tr><td>Seguros & Assist.</td><td>11</td><td>R$ 1.980</td><td><span class="badge b-info">No alvo</span></td></tr>
+        <tr><td>Cuidados & Saúde</td><td>7</td><td>R$ 1.240</td><td><span class="badge b-warn">Abaixo</span></td></tr>
+        <tr><td>Serviços Póstumos</td><td>9</td><td>R$ 1.610</td><td><span class="badge b-ok">No alvo</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+ </div>`;
+}
+function app4(){
+ const days=[1,1,1,1,1,0,1,1,1,1,1,1,1,2];
+ const streak=days.map(d=>`<i class="${d===1?'on':d===2?'on today':''}"></i>`).join('');
+ return `<span class="dashtag">EXPERIÊNCIA · Capacitação gamificada</span>
+ <p class="lead">Microlearning para as equipes das cinco unidades: trilhas de <b>atendimento humanizado, vendas consultivas, LGPD, compliance/Código de Ética e prevenção a fraude/glosa</b>, com mecânica de jogo (XP, sequência, conquistas e ranking). Padroniza o atendimento das marcas, reforça a governança e acelera a integração — com reflexo direto em conversão e sinistralidade.</p>
+ <div class="applay">
+  ${phone('Angelus Academy','Olá, Marina 👋 · 4 trilhas ativas',
+    `<div class="mini"><div class="row"><div class="mt">Atendimento Humanizado</div><span class="ms">82%</span></div><div class="progress" style="margin-top:7px"><i style="width:82%"></i></div></div>
+     <div class="mini"><div class="row"><div class="mt">LGPD & Código de Ética</div><span class="ms">54%</span></div><div class="progress" style="margin-top:7px"><i style="width:54%"></i></div></div>
+     <div class="mini"><div class="row"><div class="mt">Vendas Consultivas</div><span class="ms">100%</span></div><div class="progress" style="margin-top:7px"><i style="width:100%;background:var(--ok)"></i></div></div>
+     <div class="callout" style="margin-top:4px">🔥 Sequência de 12 dias de estudo</div>`,
+    `<div class="on"><span class="d">🎓</span>Trilhas</div><div><span class="d">▶️</span>Aulas</div><div><span class="d">🏅</span>Certif.</div><div><span class="d">👤</span>Perfil</div>`)}
+  <div class="stack">
+    <div class="card"><h3>Seu progresso</h3><div class="sub">nível, XP e sequência de estudo</div>
+      <div class="xpwrap"><div class="lvl"><b>7</b><span>NÍVEL</span></div>
+        <div style="flex:1"><div class="row" style="font-size:12px;font-weight:600"><span>2.240 XP</span><span class="note">faltam 760 p/ nível 8</span></div>
+          <div class="xpbar"><i style="width:75%"></i></div></div>
+      </div>
+      <div style="font-size:12px;font-weight:600;margin-top:14px">🔥 Sequência atual — 12 dias</div>
+      <div class="streak">${streak}</div>
+    </div>
+    <div class="grid g2" style="gap:18px">
+      <div class="card"><h3>Conquistas</h3><div class="sub">8 de 12 desbloqueadas</div>
+        <div class="badgewall">
+          <div class="bdg"><div class="ic">🥇</div><div class="bn">1ª trilha</div></div>
+          <div class="bdg"><div class="ic">🔥</div><div class="bn">Sequência 7d</div></div>
+          <div class="bdg"><div class="ic">💙</div><div class="bn">Humanizado</div></div>
+          <div class="bdg"><div class="ic">🔒</div><div class="bn">LGPD</div></div>
+          <div class="bdg"><div class="ic">🤝</div><div class="bn">Vendas</div></div>
+          <div class="bdg"><div class="ic">⚖️</div><div class="bn">Ética</div></div>
+          <div class="bdg lock"><div class="ic">💎</div><div class="bn">Nível 10</div></div>
+          <div class="bdg lock"><div class="ic">👑</div><div class="bn">Top 1</div></div>
+        </div>
+      </div>
+      <div class="card"><h3>Ranking da equipe</h3><div class="sub">Rede de atendimento · jun</div>
+        <div class="leader">
+          <div class="lr"><span class="rk g">1</span>Carla M.<span class="pts">2.880 XP</span></div>
+          <div class="lr"><span class="rk">2</span>João P.<span class="pts">2.520 XP</span></div>
+          <div class="lr me"><span class="rk">3</span>Você (Marina)<span class="pts">2.240 XP</span></div>
+          <div class="lr"><span class="rk">4</span>Bruno S.<span class="pts">2.040 XP</span></div>
+          <div class="lr"><span class="rk">5</span>Aline F.<span class="pts">1.820 XP</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+ </div>`;
+}
+function app5(){
+ return `<span class="dashtag">FINANCEIRO · Auditoria de contas & sinistros com IA</span>
+ <p class="lead">Nas guias e contas médicas da rede (Cuidados & Saúde) e nos sinistros de seguros/assistências, a IA analisa os documentos e <b>detecta glosa, cobrança em duplicidade, item fora do pacote e inconsistência</b> antes do pagamento. Reduz a sinistralidade, protege o caixa e acelera a auditoria — o auditor foca nos casos de maior risco.</p>
+ <div class="applay">
+  ${phone('Auditoria por IA','Conta #GC-58120 · Clínica Rede',
+    `<div style="background:linear-gradient(135deg,#081a30,#123056);border-radius:14px;height:150px;position:relative;margin-bottom:12px;overflow:hidden">
+        <div style="position:absolute;top:26px;left:22px;right:22px;height:14px;background:rgba(239,77,87,.35);border:1px solid #ef4d57;border-radius:4px"></div>
+        <div style="position:absolute;top:20px;left:26px;font-size:9px;color:#ffb3b0">item duplicado 0.95</div>
+        <div style="position:absolute;top:70px;left:22px;right:70px;height:14px;background:rgba(245,165,36,.30);border:1px solid #f5a524;border-radius:4px"></div>
+        <div style="position:absolute;top:64px;left:26px;font-size:9px;color:#ffd79a">fora do pacote 0.71</div>
+        <div style="position:absolute;bottom:8px;left:10px;font-size:11px;color:#aecbec">conta_58120.pdf</div></div>
+     <div class="mini"><div class="row"><div class="mt">🔴 Item em duplicidade</div><span class="badge b-bad">95%</span></div><div class="ms">glosar R$ 480 · 2 lançamentos iguais</div></div>
+     <div class="mini"><div class="row"><div class="mt">🟠 Material fora do pacote</div><span class="badge b-warn">71%</span></div><div class="ms">conferir tabela contratada</div></div>`,
+    `<div class="on"><span class="d">🤖</span>Análise</div><div><span class="d">🗂️</span>Fila</div><div><span class="d">📈</span>Histórico</div><div><span class="d">👤</span>Perfil</div>`)}
+  <div class="stack">
+    <div class="card"><h3>Estúdio de auditoria</h3><div class="sub">Conta #GC-58120 · IA Claims-Vision v3</div>
+      <div class="detview"><div class="gridb"></div>
+        <div class="bbox" style="left:10%;top:20%;width:80%;height:14%;border-color:#ef4d57"><span class="bl" style="background:#ef4d57;color:#fff">duplicidade · 0.95</span></div>
+        <div class="bbox" style="left:10%;top:50%;width:60%;height:14%;border-color:#f5a524"><span class="bl" style="background:#f5a524">fora do pacote · 0.71</span></div>
+        <div class="bbox" style="left:10%;top:78%;width:44%;height:14%;border-color:#1a9e6a"><span class="bl" style="background:#1a9e6a;color:#fff">conforme · 0.97</span></div>
+      </div>
+      <div style="margin-top:14px">
+        <div class="confrow"><span class="cn">Item em duplicidade</span><div class="confbar"><i style="width:95%;background:#ef4d57"></i></div><span class="cv">95%</span></div>
+        <div class="confrow"><span class="cn">Fora do pacote/contrato</span><div class="confbar"><i style="width:71%;background:#f5a524"></i></div><span class="cv">71%</span></div>
+        <div class="confrow"><span class="cn">Divergência de valor</span><div class="confbar"><i style="width:58%;background:#f5a524"></i></div><span class="cv">58%</span></div>
+      </div>
+    </div>
+    <div class="card"><h3>Pipeline de auditoria</h3><div class="sub">guias e contas · análise automática</div>
+      <div class="pipe">
+        <div class="pstep"><div class="pi">📄</div><div class="pn">Guia/Conta</div></div><span class="parr">➜</span>
+        <div class="pstep"><div class="pi">🧹</div><div class="pn">Extrai (OCR)</div></div><span class="parr">➜</span>
+        <div class="pstep"><div class="pi">🧠</div><div class="pn">Modelo IA</div></div><span class="parr">➜</span>
+        <div class="pstep"><div class="pi">🏷️</div><div class="pn">Marca glosa</div></div><span class="parr">➜</span>
+        <div class="pstep"><div class="pi">🗂️</div><div class="pn">Fila auditor</div></div>
+      </div>
+      <div class="callout" style="margin:14px 0 0">⚡ <b>9.320 contas</b> conferidas automaticamente · <b>640</b> sinalizadas — o auditor foca em ~7% e o Grupo recupera <b>R$ 214 mil</b> em glosas no mês.</div>
+    </div>
+  </div>
+ </div>
+ <div class="disc">* Marcações de detecção e percentuais são ilustrativos para a demonstração do conceito.</div>`;
+}
+
+/* ================= DASH 1 — SINISTRALIDADE & REDE ================= */
+function dash1(){
+ const marcas=['Planos & Benefícios','Cuidados & Saúde','Seguros & Assist.','Serviços Póstumos','Assistência Ortop.','Rede Própria (clínicas)'];
+ const meses=['Fev','Mar','Abr','Mai','Jun'];
+ const data=[ [2,2,1,2,2],[3,3,4,4,4],[2,1,2,1,2],[1,1,2,1,1],[2,3,3,2,3],[2,2,3,3,2] ];
+ const cls=['c0','c1','c2','c3','c4'];
+ let rows=`<div class="hrow"><div></div>${meses.map(n=>`<div class="hh">${n}</div>`).join('')}</div>`;
+ marcas.forEach((p,i)=>{rows+=`<div class="hrow"><div class="hl">${p}</div>${data[i].map(v=>{const pct=['—','58','66','74','82'][v];return `<div class="cell ${cls[v]}">${pct}%</div>`;}).join('')}</div>`;});
+ const r3=(v,c,nm)=>`<div class="ring"><div class="circ" style="background:conic-gradient(${c} ${v*3.6}deg,#e3e8f0 0)"><b>${v}%</b></div><div class="nm">${nm}</div></div>`;
+ setTimeout(()=>{
+  C('d1g',{type:'doughnut',data:{datasets:[{data:[68,32],backgroundColor:['#f5a524','#e3e8f0'],borderWidth:0,circumference:270,rotation:225}]},options:{cutout:'74%',plugins:{legend:{display:false},tooltip:{enabled:false}}}});
+ },40);
+ return `<span class="dashtag">VISUALIZAÇÃO · Heatmap de sinistralidade</span>
+  <p class="lead">Sinistralidade das marcas <b>em tempo real</b>, com mapa de calor por unidade e mês, indicadores de uso da rede própria e medidor global. Antecipa a marca que sai da meta — antes de virar prejuízo no fechamento. <b>Sinistralidade</b> = quanto da receita é consumido por custo assistencial/sinistro.</p>
+  <div class="grid" style="grid-template-columns:300px 1fr;gap:18px">
+    <div class="stack">
+      <div class="card" style="text-align:center"><h3>Sinistralidade global</h3><div class="sub">custo assistencial / receita</div>
+        <div class="gauge"><canvas id="d1g"></canvas><div class="lbl"><b>68%</b><span>meta &le; 70%</span></div></div>
+      </div>
+      ${kpi('Atendimentos rede própria','132.114','no ano · saúde','flat')}
+      ${kpi('Custo assistencial (mês)','R$ 19,3 mi','▲ 4% vs. mês ant.','down')}
+    </div>
+    <div class="card"><h3>Heatmap · marca × mês</h3><div class="sub">sinistralidade (%) por unidade de negócio</div>
+      <div class="heat">${rows}</div>
+      <div class="heatleg"><span><span class="sw c2"></span>&lt;60% saudável</span><span><span class="sw c1"></span>60–70% no alvo</span><span><span class="sw c3"></span>70–80% atenção</span><span><span class="sw c4"></span>&gt;80% crítico</span></div>
+    </div>
+  </div>
+  <div class="grid g2" style="margin-top:18px">
+   <div class="card"><h3>Uso da rede própria</h3><div class="sub">verticalização reduz custo</div>
+     <div class="minirings">${r3(71,'#265d97','Na rede própria')}${r3(68,'#f5a524','Sinistralidade')}${r3(93,'#1a9e6a','Guias OK')}</div>
+     <div class="note" style="margin-top:14px;text-align:center">71% dos atendimentos ocorrem na <b style="color:var(--green-600)">rede própria</b> — cada ponto reduz o custo assistencial.</div>
+   </div>
+   <div class="card"><h3>Marcas em alerta</h3><div class="sub">foco da controladoria</div>
+     <table><thead><tr><th>Unidade</th><th>Sinist.</th><th>Meta</th><th>Causa</th><th>Status</th></tr></thead><tbody>
+       <tr><td>Cuidados & Saúde</td><td>74%</td><td>70%</td><td>Alta de exames/internações</td><td><span class="badge b-bad">Fora da meta</span></td></tr>
+       <tr><td>Assistência Ortop.</td><td>82%</td><td>75%</td><td>OPME e transporte</td><td><span class="badge b-warn">Atenção</span></td></tr>
+       <tr><td>Seguros & Assist.</td><td>66%</td><td>70%</td><td>—</td><td><span class="badge b-ok">No alvo</span></td></tr>
+       <tr><td>Planos & Benefícios</td><td>58%</td><td>65%</td><td>—</td><td><span class="badge b-ok">Saudável</span></td></tr>
+     </tbody></table>
+   </div>
+  </div>`;
+}
+
+/* ================= DASH 2 — VENDAS & RECEITA ================= */
+function dash2(){
+ const stages=[['Leads',3200,'#aecbec'],['Contato/Simulação',1840,'#5f9ad8'],['Proposta',1120,'#3b7bc4'],['Assinatura',720,'#265d97'],['Ativação (1º pagto)',560,'#0c2340']];
+ const max=3200;
+ const fun=stages.map(s=>{const w=42+(s[1]/max)*58;return `<div class="fstage" style="width:${w}%;background:linear-gradient(135deg,${s[2]},${s[2]}cc)"><span><small>${s[0]}</small></span><b>${s[1]}</b></div>`;}).join('');
+ setTimeout(()=>{
+  C('d2c',{type:'bar',data:{labels:['Lead→Contato','Contato→Prop.','Prop.→Assin.','Assin.→Ativação','Ativação→Cobrança'],datasets:[{label:'Dias médios',data:[1.5,3.2,2.1,1.0,2.4],backgroundColor:(c)=>{const x=c.chart.ctx,g=x.createLinearGradient(0,0,c.chart.width,0);g.addColorStop(0,'#265d97');g.addColorStop(1,'#c9a227');return g;},borderRadius:6,barThickness:18}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{display:false}}}}});
+ },40);
+ return `<span class="dashtag">VISUALIZAÇÃO · Funil de vendas & receita</span>
+  <p class="lead">A captação de associados como um <b>funil</b> — do lead à ativação com 1º pagamento — com a taxa de conversão, o tempo por etapa e a receita gerada. Mostra onde o cliente escapa e qual marca converte melhor, para direcionar comercial e receita recorrente.</p>
+  <div class="grid g4" style="margin-bottom:18px">
+   ${kpi('Leads no mês','3.200','todas as marcas','flat')}
+   ${kpi('Conversão lead→ativação','17,5%','▲ 1,8 p.p.','up')}
+   ${kpi('Ticket médio','R$ 214/mês','▲ mix melhor','up')}
+   ${kpi('Receita nova (recorrente)','R$ 1,19 mi','no mês','up')}
+  </div>
+  <div class="grid" style="grid-template-columns:1.05fr 1fr;gap:18px">
+    <div class="card"><h3>Funil de captação (mês)</h3><div class="sub">do lead à ativação com 1º pagamento</div>
+      <div class="funnel">${fun}</div>
+      <div class="note" style="margin-top:10px">Maior perda entre <b>proposta e assinatura</b> — foco em assinatura digital e simulação clara.</div>
+    </div>
+    <div class="card"><h3>Tempo por etapa</h3><div class="sub">dias · gargalo em destaque</div><div class="chartbox"><canvas id="d2c"></canvas></div></div>
+  </div>
+  <div class="card" style="margin-top:18px"><h3>Conversão & receita por marca</h3><div class="sub">foco do comercial</div>
+    <table><thead><tr><th>Marca</th><th>Leads</th><th>Ativações</th><th>Conversão</th><th>Receita nova</th><th>Status</th></tr></thead><tbody>
+      <tr><td>Planos & Benefícios</td><td>1.280</td><td>268</td><td>20,9%</td><td>R$ 468 mil</td><td><span class="badge b-ok">Destaque</span></td></tr>
+      <tr><td>Seguros & Assistências</td><td>720</td><td>132</td><td>18,3%</td><td>R$ 246 mil</td><td><span class="badge b-ok">Estável</span></td></tr>
+      <tr><td>Serviços Póstumos</td><td>560</td><td>96</td><td>17,1%</td><td>R$ 198 mil</td><td><span class="badge b-info">Crescendo</span></td></tr>
+      <tr><td>Cuidados & Saúde</td><td>640</td><td>64</td><td>10,0%</td><td>R$ 178 mil</td><td><span class="badge b-warn">Melhorar</span></td></tr>
+    </tbody></table>
+  </div>`;
+}
+
+/* ================= DASH 3 — COBRANÇA & INADIMPLÊNCIA ================= */
+function dash3(){
+ const card=(c,t,m,who,foot)=>`<div class="kcard ${c}"><div class="kt">${t}</div><div class="km">${m}</div><div class="kf"><span>${foot}</span><span class="av">${who}</span></div></div>`;
+ return `<span class="dashtag">VISUALIZAÇÃO · Kanban de cobrança & inadimplência</span>
+  <p class="lead">A carteira de boletos como um <b>quadro Kanban ao vivo</b>: cada título percorre as colunas da régua de cobrança até a quitação. A controladoria enxerga o dinheiro em aberto, prioriza a recuperação e reduz a <b>inadimplência</b> — receita recorrente que não pode escapar.</p>
+  <div class="grid g4" style="margin-bottom:18px">
+   ${kpi('Inadimplência','6,2%','▼ de 6,9%','up')}
+   ${kpi('Em aberto (total)','R$ 1,76 mi','3.918 boletos','flat')}
+   ${kpi('Recuperado no mês','R$ 640 mil','▲ régua ativa','up')}
+   ${kpi('Acordos ativos','512','parcelamentos','flat')}
+  </div>
+  <div class="card"><h3>Carteira de cobrança · hoje</h3><div class="sub">arraste-e-solte (conceito) · régua automática</div>
+   <div class="kanban">
+     <div class="kcol"><div class="kh"><span><span class="kdot" style="background:#aecbec"></span>A vencer (7d)</span><span class="cnt">1.240</span></div>
+       ${card('','Família Souza · R$ 189','vence 10/07','LR','lembrete Pix')}
+       ${card('','Empresa Vale · R$ 4,2k','vence 12/07','CT','boleto enviado')}
+     </div>
+     <div class="kcol"><div class="kh"><span><span class="kdot" style="background:#f5a524"></span>Vencido (1–15d)</span><span class="cnt">820</span></div>
+       ${card('wn','M. Oliveira · R$ 259','5 dias','LR','2ª via + SMS')}
+     </div>
+     <div class="kcol"><div class="kh"><span><span class="kdot" style="background:#ef4d57"></span>Vencido (16–60d)</span><span class="cnt">610</span></div>
+       ${card('cr','J. Pereira · R$ 178','28 dias','CT','negociar')}
+       ${card('cr','R. Lima · R$ 210','41 dias','CT','risco cancel.')}
+     </div>
+     <div class="kcol"><div class="kh"><span><span class="kdot" style="background:#3b7bc4"></span>Em negociação</span><span class="cnt">336</span></div>
+       ${card('wn','Família Nunes','acordo 3x','LR','proposta enviada')}
+     </div>
+     <div class="kcol"><div class="kh"><span><span class="kdot" style="background:#1a9e6a"></span>Quitado / acordo</span><span class="cnt">912</span></div>
+       ${card('ok','C. Almeida','acordo pago 1/3','CT','✓')}
+     </div>
+   </div>
+  </div>
+  <div class="card" style="margin-top:18px"><h3>Títulos de maior risco</h3><div class="sub">foco da recuperação</div>
+    <table><thead><tr><th>Cliente</th><th>Marca</th><th>Valor</th><th>Atraso</th><th>Status</th></tr></thead><tbody>
+      <tr><td>Condomínio Bela Vista</td><td>Seguros & Assist.</td><td>R$ 8.940</td><td>52 d</td><td><span class="badge b-bad">Crítico</span></td></tr>
+      <tr><td>R. Lima</td><td>Cuidados & Saúde</td><td>R$ 210</td><td>41 d</td><td><span class="badge b-bad">Risco cancel.</span></td></tr>
+      <tr><td>J. Pereira</td><td>Planos & Benefícios</td><td>R$ 178</td><td>28 d</td><td><span class="badge b-warn">Negociar</span></td></tr>
+      <tr><td>M. Oliveira</td><td>Cuidados & Saúde</td><td>R$ 259</td><td>5 d</td><td><span class="badge b-info">2ª via</span></td></tr>
+    </tbody></table>
+  </div>`;
+}
+
+/* ================= DASH 4 — DRE & MARGEM ================= */
+function dash4(){
+ setTimeout(()=>{
+  C('d4w',{type:'bar',data:{labels:['Receita','Custo assist./sinistro','Pessoal','Comercial/comissão','Adm. (CSC)','EBITDA'],datasets:[{
+    data:[[0,100],[32,100],[24,32],[19,24],[15,19],[0,19]],
+    backgroundColor:['#265d97','#ef4d57','#f5a524','#f5a524','#f5a524','#1a9e6a'],borderRadius:4}]},
+    options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'índice '+c.raw[0]+'→'+c.raw[1]}}},scales:{x:{grid:{display:false}},y:{title:{display:true,text:'índice (receita=100)'}}}}});
+  C('d4mix',{type:'doughnut',data:{labels:['Planos & Benefícios','Cuidados & Saúde','Seguros & Assistências','Serviços Póstumos','Floricultura/Outros'],datasets:[{data:[41,22,18,13,6],backgroundColor:['#0c2340','#265d97','#3b7bc4','#5f9ad8','#c9a227'],borderWidth:2,borderColor:'#fff'}]},options:{cutout:'66%',plugins:{legend:{position:'bottom'}}}});
+ },40);
+ return `<span class="dashtag">VISUALIZAÇÃO · Waterfall do DRE + mix de receita</span>
+  <p class="lead">Da receita ao <b>EBITDA em cascata (waterfall)</b>, com a margem e o mix de receita por unidade de negócio. Mostra como custo assistencial/sinistro, pessoal, comercial e o rateio do CSC formam o resultado — e qual marca sustenta o Grupo.</p>
+  <div class="grid g4" style="margin-bottom:18px">
+   ${kpi('Margem EBITDA','19,3%','▲ 0,8 p.p.','up')}
+   ${kpi('Custo assist./sinistro','32% da receita','sinistralidade 68%','down')}
+   ${kpi('Marca + rentável','Planos','margem 26%','flat')}
+   ${kpi('Marca a melhorar','Cuidados & Saúde','margem 9%','down')}
+  </div>
+  <div class="grid g2">
+   <div class="card"><h3>Da receita ao EBITDA</h3><div class="sub">composição do resultado (índice)</div><div class="chartbox"><canvas id="d4w"></canvas></div></div>
+   <div class="card"><h3>Mix de receita por unidade</h3><div class="sub">participação % do portfólio</div><div class="chartbox donutwrap"><canvas id="d4mix"></canvas><div class="donutctr" style="bottom:42px"><b style="background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">R$ 28,4 mi</b><span>receita/mês</span></div></div></div>
+  </div>
+  <div class="card" style="margin-top:18px"><h3>Rentabilidade por unidade de negócio</h3><div class="sub">receita, margem e tendência</div>
+    <table><thead><tr><th>Unidade</th><th>Receita (mês)</th><th>Margem</th><th>Mix</th><th>Status</th></tr></thead><tbody>
+      <tr><td>Planos & Benefícios</td><td>R$ 11,6 mi</td><td>26%</td><td>41%</td><td><span class="badge b-ok">Destaque</span></td></tr>
+      <tr><td>Cuidados & Saúde</td><td>R$ 6,3 mi</td><td>9%</td><td>22%</td><td><span class="badge b-warn">Sinistralidade alta</span></td></tr>
+      <tr><td>Seguros & Assistências</td><td>R$ 5,1 mi</td><td>22%</td><td>18%</td><td><span class="badge b-ok">Estável</span></td></tr>
+      <tr><td>Serviços Póstumos</td><td>R$ 3,7 mi</td><td>21%</td><td>13%</td><td><span class="badge b-ok">Crescendo</span></td></tr>
+      <tr><td>Floricultura / Outros</td><td>R$ 1,7 mi</td><td>16%</td><td>6%</td><td><span class="badge b-info">Complementar</span></td></tr>
+    </tbody></table>
+  </div>`;
+}
+
+/* ================= DASH 5 — EXECUTIVO & GOVERNANÇA ================= */
+function dash5(){
+ const ring=(v,color,nm,suf,dl,dcls)=>`<div class="ring"><div class="circ" style="background:conic-gradient(${color} ${v*3.6}deg,#e3e8f0 0)"><b>${v}${suf}</b></div><div class="nm">${nm}</div><div class="dl ${dcls}">${dl}</div></div>`;
+ const sb=(arr)=>`<div class="spark">${arr.map(v=>`<i style="height:${v}%"></i>`).join('')}</div>`;
+ setTimeout(()=>{
+  C('d5rev',{type:'line',data:{labels:MES.slice(0,6),datasets:[{label:'Faturamento (R$ mi)',data:[25.8,26.4,26.9,27.5,27.9,28.4],borderColor:'#265d97',backgroundColor:(c)=>{const x=c.chart.ctx,g=x.createLinearGradient(0,0,0,210);g.addColorStop(0,'rgba(201,162,39,.30)');g.addColorStop(1,'rgba(38,93,151,0)');return g;},fill:true,tension:.4,borderWidth:3,pointRadius:0,pointHoverRadius:5}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{display:false}}}}});
+  C('d5b',{type:'line',data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun'],datasets:[
+    {label:'EBITDA %',data:[17.6,18.0,18.4,18.7,19.0,19.3],borderColor:'#1a9e6a',tension:.35,borderWidth:3,pointRadius:0},
+    {label:'Sinistralidade %',data:[71,70.5,69.8,69,68.5,68],borderColor:'#ef4d57',tension:.35,borderWidth:3,pointRadius:0,yAxisID:'y2'}]},
+    options:{plugins:{legend:{position:'bottom'}},scales:{y:{min:14,max:24},y2:{position:'right',min:60,max:78,grid:{drawOnChartArea:false}},x:{grid:{display:false}}}}});
+ },40);
+ return `<span class="dashtag">VISUALIZAÇÃO · Scorecard executivo & governança</span>
+  <p class="lead">Visão de diretoria: os indicadores que sustentam o Grupo — EBITDA, sinistralidade, inadimplência e satisfação (NPS) — em anéis, com o faturamento consolidado e a evolução de EBITDA × sinistralidade. Pronto para o comitê, para a auditoria e para a governança (LGPD/Código de Ética).</p>
+  <div class="card"><h3>Indicadores estratégicos</h3><div class="sub">desempenho vs. meta</div>
+    <div class="rings">
+      ${ring(19,'#265d97','EBITDA','%','meta 18% ✓','up')}
+      ${ring(68,'#f5a524','Sinistralidade','%','meta &le;70% ✓','up')}
+      ${ring(6,'#1a9e6a','Inadimplência','%','▼ melhorando','up')}
+      ${ring(72,'#0c2340','NPS','','satisfação','up')}
+    </div>
+  </div>
+  <div class="grid g4" style="margin:18px 0">
+   ${kpi('Faturamento (mês)','R$ 28,4 mi','▲ 9% YoY','up')}
+   ${kpi('Associados ativos','132 mil','base recorrente','up')}
+   ${kpi('Coberturas pagas','R$ 621 mil','no ano · seguros','flat')}
+   ${kpi('Caixa (posição)','R$ 9,2 mi','▲ saudável','up')}
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3>Faturamento consolidado</h3><div class="sub">evolução semestral (R$ mi)</div><div class="chartbox sm"><canvas id="d5rev"></canvas></div></div>
+    <div class="card"><h3>EBITDA × Sinistralidade</h3><div class="sub">margem sobe, sinistralidade cai</div><div class="chartbox sm"><canvas id="d5b"></canvas></div></div>
+  </div>
+  <div class="card" style="margin-top:18px"><h3>Scorecard por área</h3><div class="sub">desempenho e mini-tendência (6 meses)</div>
+   <table class="scoretab"><thead><tr><th>Área</th><th>Indicador</th><th>Atual</th><th>Meta</th><th>Tendência</th><th>Status</th></tr></thead><tbody>
+     <tr><td>Controladoria</td><td>Margem EBITDA</td><td>19,3%</td><td>18%</td><td>${sb([72,74,78,80,82,86])}</td><td><span class="trend-up">▲ acima</span></td></tr>
+     <tr><td>Saúde</td><td>Sinistralidade</td><td>68%</td><td>70%</td><td>${sb([100,92,84,76,68,60])}</td><td><span class="trend-up">▲ no alvo</span></td></tr>
+     <tr><td>Financeiro</td><td>Inadimplência</td><td>6,2%</td><td>6,5%</td><td>${sb([100,90,82,74,66,58])}</td><td><span class="trend-up">▲ melhor</span></td></tr>
+     <tr><td>Comercial</td><td>Conversão de vendas</td><td>17,5%</td><td>16%</td><td>${sb([72,76,80,82,85,88])}</td><td><span class="trend-up">▲ acima</span></td></tr>
+     <tr><td>Experiência</td><td>NPS</td><td>72</td><td>70</td><td>${sb([60,64,66,68,70,72])}</td><td><span class="trend-up">▲ subindo</span></td></tr>
+   </tbody></table>
+  </div>`;
+}
+
+/* ================= POWER PLATFORM ================= */
+function archDiagram(){
+ return `<div class="card"><h3>Arquitetura integrada — Microsoft Power Platform</h3><div class="sub">tudo no Dataverse e no Microsoft 365 que o Grupo já usa (via CSC)</div>
+  <div class="flow">
+    <div class="step"><div class="si">📱</div><div class="sn">Power Apps</div><div class="sd">Atendimento & OS</div></div>
+    <div class="arrow">➜</div>
+    <div class="step" style="border-color:var(--green);box-shadow:0 0 0 2px var(--ring)"><div class="si">🗄️</div><div class="sn">Dataverse</div><div class="sd">Base única governada</div></div>
+    <div class="arrow">➜</div>
+    <div class="step"><div class="si">⚡</div><div class="sn">Power Automate</div><div class="sd">Fechamento · alertas · cobrança</div></div>
+    <div class="arrow">➜</div>
+    <div class="step"><div class="si">📊</div><div class="sn">Power BI</div><div class="sd">5 painéis</div></div>
+  </div>
+  <div class="flow" style="margin-top:14px">
+    <div class="step"><div class="si">🌐</div><div class="sn">Power Pages</div><div class="sd">Portal do associado</div></div>
+    <div class="arrow">➜</div>
+    <div class="step"><div class="si">💬</div><div class="sn">Copilot Studio</div><div class="sd">Copiloto de gestão</div></div>
+    <div class="arrow">➜</div>
+    <div class="step"><div class="si">🟦</div><div class="sn">Microsoft 365</div><div class="sd">Teams · SharePoint · Outlook</div></div>
+    <div class="arrow">➜</div>
+    <div class="step"><div class="si">🔐</div><div class="sn">Entra ID</div><div class="sd">Segurança & LGPD</div></div>
+  </div>
+  <div class="archlegend"><span><span class="dot" style="background:var(--green)"></span>Base de dados</span><span><span class="dot" style="background:var(--blue-500)"></span>Aplicação & automação</span><span><span class="dot" style="background:var(--blue-300)"></span>Experiência</span><span>Fontes: ERP das unidades · operadora/plano · gateway de boleto · CRM</span></div>
+ </div>`;
+}
+function pp1(){
+ return `<p class="lead">App canvas no <b>Power Apps</b> sobre o Dataverse para <b>atendimento e ordem de serviço multiunidade</b> — clínica, floricultura, serviços póstumos e assistências — inclusive offline. Captura a receita e o serviço na origem, padroniza o atendimento das marcas e alimenta os painéis financeiros em tempo real.</p>
+  <div class="grid g2">
+   <div class="card"><h3>Tela do app (Power Apps)</h3><div class="sub">atendimento · tablet/mobile na unidade</div>
+     <div style="background:#f5f7fb;border:1px solid var(--line);border-radius:14px;padding:14px">
+       <div class="row" style="margin-bottom:10px"><b style="font-size:13px">🧾 OS · #4820 · Serviços Póstumos</b><span class="badge b-info">Aberta</span></div>
+       <div class="mini"><div class="row"><div class="mt">Associado / família</div><span class="ms">Família Ramos · matrícula 41.902</span></div></div>
+       <div class="mini"><div class="row"><div class="mt">Itens do serviço</div><span class="ms">3/4</span></div><div class="progress" style="margin-top:7px"><i style="width:75%"></i></div></div>
+       <div class="mini"><div class="mt">Cobertura do plano</div><div class="row" style="margin-top:6px;justify-content:flex-start;gap:8px"><span class="badge b-ok">Coberto 100%</span><span class="ms">sem coparticipação</span></div></div>
+       <div class="btn acc full" style="margin-top:8px">Confirmar → Dataverse</div>
+     </div>
+   </div>
+   <div class="card stack"><h3>Por que Power Apps</h3>
+     <div class="feat"><div class="fi">💳</div><div><b>Custo baixo</b><br><span class="note">Aproveita o licenciamento Microsoft 365 já existente no CSC.</span></div></div>
+     <div class="feat"><div class="fi">📴</div><div><b>Offline nativo</b><br><span class="note">Funciona na unidade sem depender de rede e sincroniza.</span></div></div>
+     <div class="feat"><div class="fi">🧾</div><div><b>Receita na origem</b><div class="note">Serviço, cobertura e cobrança registrados no ato do atendimento.</div></div></div>
+     <div class="feat"><div class="fi">🧩</div><div><b>Conectores prontos</b><br><span class="note">ERP, operadora, gateway de boleto, SharePoint e +900 conectores.</span></div></div>
+   </div>
+  </div>
+  <div style="margin-top:18px">${archDiagram()}</div>`;
+}
+function pp2(){
+ return `<p class="lead">Fluxo no <b>Power Automate</b> que faz o <b>fechamento financeiro e o DRE por unidade</b> — coletando dos ERPs das marcas, consolidando receita, custo assistencial, pessoal e rateio do CSC, com aprovação e distribuição à diretoria. Acaba com a consolidação manual em planilha e antecipa o resultado.</p>
+  <div class="card"><h3>Fluxo: fechamento & DRE consolidado</h3><div class="sub">por unidade de negócio / mensal</div>
+   <div class="flow">
+     <div class="step"><div class="si">🔄</div><div class="sn">Coleta</div><div class="sd">ERPs · operadora · boleto</div></div>
+     <div class="arrow">➜</div>
+     <div class="step"><div class="si">🧮</div><div class="sn">Consolida</div><div class="sd">Receita · custo · rateio CSC</div></div>
+     <div class="arrow">➜</div>
+     <div class="step"><div class="si">📄</div><div class="sn">Gera DRE</div><div class="sd">Por marca + grupo</div></div>
+     <div class="arrow">➜</div>
+     <div class="step"><div class="si">🖊️</div><div class="sn">Aprovação</div><div class="sd">Controladoria (Teams)</div></div>
+     <div class="arrow">➜</div>
+     <div class="step"><div class="si">📧</div><div class="sn">Distribui</div><div class="sd">Diretoria + Power BI</div></div>
+   </div>
+  </div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="card"><h3>Aprovação no Teams</h3><div class="sub">card adaptativo</div>
+      <div style="background:#f5f7fb;border:1px solid var(--line);border-radius:14px;padding:14px">
+        <b style="font-size:13px">📄 Fechamento · Cuidados & Saúde · Jun</b>
+        <div class="note" style="margin:8px 0">Receita R$ 6,3 mi · sinistralidade 74% · EBITDA 9% · inadimplência 5,8%</div>
+        <div class="row"><span class="btn acc" style="flex:1;margin-right:6px">Aprovar e publicar</span><span class="btn" style="flex:1;background:linear-gradient(135deg,#ef4d57,#cf2436)">Revisar</span></div>
+      </div>
+    </div>
+    <div class="card stack"><h3>Ganhos</h3>
+      <div class="feat"><div class="fi">⏱️</div><div><b>Dias, não semanas</b> para fechar o resultado consolidado.</div></div>
+      <div class="feat"><div class="fi">📐</div><div><b>Padronização</b> de DRE, rateio e margem entre as marcas.</div></div>
+      <div class="feat"><div class="fi">🔎</div><div><b>Rastreabilidade</b> para auditoria e governança.</div></div>
+    </div>
+  </div>`;
+}
+function pp3(){
+ return `<p class="lead">Robôs no <b>Power Automate</b> que <b>alertam sobre sinistralidade acima da meta, inadimplência em alta, contrato/associado em risco de cancelamento e desvio de orçamento</b> — em tempo real, direto no Teams, abrindo tarefa para o responsável. Protege a margem e o caixa do Grupo.</p>
+  <div class="card"><h3>Fluxo: alertas financeiros</h3><div class="sub">monitoramento contínuo</div>
+   <div class="flow">
+     <div class="step"><div class="si">📡</div><div class="sn">Evento</div><div class="sd">Fechamento · boleto · sinistro</div></div>
+     <div class="arrow">➜</div>
+     <div class="step"><div class="si">🔍</div><div class="sn">Avalia</div><div class="sd">Meta × real por marca</div></div>
+     <div class="arrow">➜</div>
+     <div class="step"><div class="si">🧾</div><div class="sn">Tarefa</div><div class="sd">Atribui responsável</div></div>
+     <div class="arrow">➜</div>
+     <div class="step"><div class="si">🔔</div><div class="sn">Notifica</div><div class="sd">Controladoria + gestor</div></div>
+   </div>
+  </div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="card"><h3>Alerta gerado</h3><div class="sub">exemplo · em tempo real</div>
+      <div class="callout" style="margin:0">🔔 <b>Riscos financeiros do dia</b><br>• Cuidados & Saúde: sinistralidade <b>74%</b> — acima da meta (70%)<br>• Inadimplência subiu para 6,2% — R$ 1,76 mi em aberto<br>• 3 contratos corporativos em risco de cancelamento<br><span class="note">Tarefas atribuídas a: Controladoria, Cobrança e Comercial</span></div>
+    </div>
+    <div class="card stack"><h3>Impacto</h3>
+      <div class="feat"><div class="fi">📉</div><div><b>Sinistralidade sob controle</b> antes do fechamento.</div></div>
+      <div class="feat"><div class="fi">💸</div><div><b>Menos inadimplência</b> com ação imediata.</div></div>
+      <div class="feat"><div class="fi">🛡️</div><div><b>Retenção</b> de associados e contratos em risco.</div></div>
+    </div>
+  </div>`;
+}
+function pp4(){
+ return `<p class="lead">Fluxo no <b>Power Automate</b> para a <b>régua de cobrança</b>: lembrete pré-vencimento, cobrança no vencido, oferta de acordo/parcelamento e baixa automática — por SMS, e-mail e WhatsApp, integrado ao gateway de boleto/Pix. Reduz inadimplência e custo de cobrança, sem depender de ligação manual.</p>
+  <div class="card"><h3>Fluxo: régua de cobrança automática</h3><div class="sub">do pré-vencimento ao acordo</div>
+   <div class="flow">
+     <div class="step"><div class="si">🗓️</div><div class="sn">Pré-vencimento</div><div class="sd">Lembrete + Pix (D-3)</div></div>
+     <div class="arrow">➜</div>
+     <div class="step"><div class="si">📨</div><div class="sn">Vencido</div><div class="sd">2ª via · SMS/e-mail</div></div>
+     <div class="arrow">➜</div>
+     <div class="step"><div class="si">🤝</div><div class="sn">Negociação</div><div class="sd">Oferta de acordo</div></div>
+     <div class="arrow">➜</div>
+     <div class="step"><div class="si">✅</div><div class="sn">Baixa</div><div class="sd">Conciliação automática</div></div>
+   </div>
+  </div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="card"><h3>Mensagem gerada</h3><div class="sub">exemplo</div>
+      <div class="callout" style="margin:0">📲 <b>Olá, Sr. Oliveira!</b><br>Seu boleto do plano vence em <b>3 dias</b> (R$ 189,90). Pague no Pix em segundos: <b>[link]</b>. Precisa de mais prazo? Responda <b>ACORDO</b> e parcelamos.<br><span class="note">Baixa automática ao identificar o pagamento.</span></div>
+    </div>
+    <div class="card stack"><h3>Impacto</h3>
+      <div class="feat"><div class="fi">💰</div><div><b>Mais recuperação</b> com menos esforço de cobrança.</div></div>
+      <div class="feat"><div class="fi">📉</div><div><b>Inadimplência menor</b> e receita recorrente protegida.</div></div>
+      <div class="feat"><div class="fi">🤝</div><div><b>Associado retido</b> com acordo antes do cancelamento.</div></div>
+    </div>
+  </div>`;
+}
+function pp5(){
+ return `<p class="lead">Agente no <b>Copilot Studio</b> (no Teams) que responde sobre faturamento, sinistralidade, inadimplência e margem por unidade — consultando os dados do Grupo em linguagem natural, com governança por marca e por permissão do usuário. A diretoria pergunta e decide sem abrir dez relatórios.</p>
+  <div class="grid g2">
+   <div class="card"><h3>Copiloto de Gestão</h3><div class="sub">plugado no Dataverse + Power BI + ERPs</div>
+     <div style="background:#f5f7fb;border:1px solid var(--line);border-radius:14px;padding:14px;font-size:13px">
+       <div style="text-align:right;margin-bottom:10px"><span style="display:inline-block;background:linear-gradient(135deg,var(--navy-700),var(--navy-600));color:#fff;padding:9px 13px;border-radius:14px 14px 3px 14px;max-width:82%">Qual marca está puxando a sinistralidade pra cima?</span></div>
+       <div style="margin-bottom:12px"><span style="display:inline-block;background:#fff;border:1px solid var(--line);padding:9px 13px;border-radius:14px 14px 14px 3px;max-width:86%">É <b>Cuidados & Saúde</b>, com sinistralidade de <b>74%</b> (meta 70%), puxada por exames e OPME da assistência ortopédica. Quer que eu avise a controladoria e abra uma tarefa?</span></div>
+       <div style="text-align:right;margin-bottom:10px"><span style="display:inline-block;background:linear-gradient(135deg,var(--navy-700),var(--navy-600));color:#fff;padding:9px 13px;border-radius:14px 14px 3px 14px">E a inadimplência do mês?</span></div>
+       <div><span style="display:inline-block;background:#fff;border:1px solid var(--line);padding:9px 13px;border-radius:14px 14px 14px 3px;max-width:86%">Está em <b>6,2%</b> (R$ 1,76 mi), mas <b>caindo</b> com a régua automática — já recuperamos R$ 640 mil no mês. <span class="note">[fonte: painel Cobrança]</span></span></div>
+     </div>
+   </div>
+   <div class="card stack"><h3>Capacidades</h3>
+     <div class="feat"><div class="fi">📊</div><div><b>Pergunta em linguagem natural</b> sobre receita, sinistralidade e caixa.</div></div>
+     <div class="feat"><div class="fi">⚙️</div><div><b>Ações</b>: abre tarefa e dispara fluxos do Power Automate.</div></div>
+     <div class="feat"><div class="fi">🔐</div><div><b>Governança</b>: responde conforme a marca e a permissão do usuário.</div></div>
+     <div class="feat"><div class="fi">🟦</div><div><b>Onde a diretoria já está</b>: dentro do Teams.</div></div>
+   </div>
+  </div>
+  <div style="margin-top:18px">${archDiagram()}</div>`;
+}
+
+/* ================= HOME ================= */
+function home(){
+ return `<div class="hero">
+   <div style="display:inline-flex;align-items:center;gap:14px;margin-bottom:16px">
+     <span style="display:inline-flex;align-items:center"><svg width="184" height="58" viewBox="0 0 220 70" xmlns="http://www.w3.org/2000/svg"><path d="M14 20 Q30 8 46 20" fill="none" stroke="#c9a227" stroke-width="3" stroke-linecap="round"/><circle cx="30" cy="24" r="3.2" fill="#c9a227"/><text x="10" y="52" font-family="Manrope,Arial" font-weight="500" font-size="21" fill="#9db9dd" letter-spacing="1">GRUPO</text><text x="92" y="52" font-family="Manrope,Arial" font-weight="800" font-size="24" fill="#ffffff" letter-spacing="-.5">Angelus</text></svg></span>
+     <span style="font-size:12px;font-weight:600;color:#c6d6ef;letter-spacing:.05em">RECEITA · SINISTRALIDADE · INADIMPLÊNCIA · EBITDA · BI &amp; AUTOMAÇÃO</span>
+   </div>
+   <h1>Portfólio de Provas de Conceito — Grupo Angelus</h1>
+   <p>Sejam muito bem-vindos. Preparamos um conjunto de <b style="color:#fff">15 provas de conceito</b> sob medida para o Grupo Angelus, com um olhar <b style="color:#fff">financeiro</b> sobre todo o ciclo da vida: aplicativos, dashboards em Power BI e automações em Power Platform, numa única plataforma sobre o Microsoft 365. Vamos navegar por cada frente para mostrar, na prática, como enxergar o resultado por unidade — sinistralidade, inadimplência, DRE e EBITDA — captar receita na origem e automatizar cobrança e fechamento, saindo da planilha e com governança. Os números são ilustrativos, apenas para dar vida às demonstrações.</p>
+   <div class="chips"><span>📱 5 Aplicativos</span><span>📊 5 Dashboards</span><span>⚡ 5 Power Platform</span><span>🗄️ Base única: Dataverse</span></div>
+   <div class="certrow"><span class="cert">🏢 5 unidades de negócio</span><span class="cert">📋 LGPD · Código de Ética</span><span class="cert">🏆 Selo IPE Ouro · SESI ODS</span></div>
+ </div>
+  <div class="card" style="margin-bottom:24px"><h3>Unidades de negócio do Grupo Angelus</h3><div class="sub">a mesma amplitude que vamos traduzir em dados e automação financeira</div>
+    <div class="clientwall">
+      <div class="cwall"><span class="ce">💳</span>Planos & Benefícios</div>
+      <div class="cwall"><span class="ce">🩺</span>Cuidados & Saúde</div>
+      <div class="cwall"><span class="ce">🛡️</span>Seguros & Assistências</div>
+      <div class="cwall"><span class="ce">🕊️</span>Serviços Póstumos</div>
+      <div class="cwall"><span class="ce">🏢</span>Centro de Serviços (CSC)</div>
+    </div>
+  </div>
+  <div class="grid g3">
+   <div class="card"><h3>📱 5 Aplicativos</h3><div class="sub">experiências mobile/portal</div><div class="note">Cockpit financeiro da diretoria (com visão por unidade), portal do associado, consultor em campo, Angelus Academy e auditoria de contas com IA.</div></div>
+   <div class="card"><h3>📊 5 Dashboards (Power BI)</h3><div class="sub">cada um com uma visualização diferente</div><div class="note">Sinistralidade & rede, funil de vendas & receita, cobrança & inadimplência, DRE & margem por unidade e o executivo com governança.</div></div>
+   <div class="card"><h3>⚡ 5 Power Platform</h3><div class="sub">automação com governança</div><div class="note">Atendimento & ordem de serviço, fechamento & DRE, alertas financeiros, régua de cobrança e o copiloto de gestão.</div></div>
+  </div>
+  <div class="grid g4" style="margin-top:22px">
+   ${kpi('Unidades','5','+ CSC','flat')}
+   ${kpi('POCs','15','navegáveis','flat')}
+   ${kpi('Base','Microsoft 365','que o Grupo já usa','flat')}
+   ${kpi('Dados','Dataverse','fonte única governada','flat')}
+  </div>
+  <div style="margin-top:24px">${archDiagram()}</div>`;
+}
+
+/* ================= router ================= */
+const VIEWS={app1,app2,app3,app4,app5,dash1,dash2,dash3,dash4,dash5,pp1,pp2,pp3,pp4,pp5};
+function go(id){
+  destroyCharts();
+  const m=meta(id);
+  document.getElementById('crumb').textContent=m?m.crumb:'Início';
+  document.getElementById('title').textContent=m?(m.ico+' '+m.name):'Portfólio de POCs — Grupo Angelus';
+  document.getElementById('pocflag').textContent=m?'Prova de conceito':'15 provas de conceito';
+  const v=document.getElementById('view');
+  v.style.animation='none';void v.offsetWidth;v.style.animation='';
+  v.innerHTML=(VIEWS[id]||home)();
+  setActive(id);window.scrollTo(0,0);
+}
+buildNav();
+document.getElementById('view').innerHTML=home();
+</script>
+</body>
+</html>
